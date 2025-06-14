@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Beranda - Sistem Perpustakaan</title>
+  <style>
+    :root {
+      --kayu: #5d4037;
+      --perkamen: #f5e3c1;
+      --perkamen-b: #e8d2aa;
+      --teks: #3e2723;
+      --krem: #fef8e7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+    }
+
+    body {
+      background: url('background-kayu.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--teks);
+    }
+
+    header {
+      background-color: rgba(93, 64, 55, 0.95);
+      color: #fff9f0;
+      padding: 1.5em;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      border-bottom: 4px solid #3e2723;
+    }
+
+    header h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    nav ul li {
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul li a {
+      color: #fff3e0;
+      text-decoration: none;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      border-radius: 6px;
+    }
+
+    nav ul li a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    nav ul li img {
+      width: 18px;
+      height: 18px;
+    }
+
+    main {
+      max-width: 700px;
+      margin: 3em auto;
+      background-color: rgba(245, 227, 193, 0.96);
+      padding: 2em;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      border: 2px solid #d2b48c;
+      text-align: center;
+    }
+
+    h2 {
+      color: var(--teks);
+      margin-bottom: 1em;
+    }
+
+    p {
+      font-size: 1.1em;
+      line-height: 1.6;
+      margin-bottom: 2em;
+      color: #4b3621;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: var(--kayu);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #3e2723;
+    }
+
+    footer {
+      background-color: rgba(222, 184, 135, 0.3);
+      text-align: center;
+      padding: 1em;
+      margin-top: 4em;
+      font-size: 0.9em;
+      color: #4b3621;
+      backdrop-filter: blur(2px);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sistem Perpustakaan</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html"><img src="icon-home.png" alt="">Beranda</a></li>
+        <li><a href="peminjaman.html"><img src="icon-loan.png" alt="">Peminjaman</a></li>
+        <li><a href="#"><img src="icon-book.png" alt="">Daftar Buku</a></li>
+        <li><a href="#"><img src="icon-history.png" alt="">Riwayat</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Selamat Datang di Sistem Perpustakaan</h2>
+    <p>
+      Jelajahi koleksi buku kami dan pinjam langsung melalui sistem ini.  
+      Suasana tenang, tema kayu, dan nuansa klasik akan menemani pencarian ilmu Anda.
+    </p>
+    <a href="peminjaman.html" class="btn">Mulai Peminjaman</a>
+  </main>
+
+  <footer>
+    &copy; 2025 Perpustakaan Digital
+  </footer>
+</body>
+</html>
