@@ -143,20 +143,24 @@
   <main>
     <h2>Formulir Peminjaman Buku</h2>
     <form action="proses_peminjaman.php" method="POST">
-      <label for="nama">Nama Peminjam:</label>
-      <input type="text" id="nama" name="nama" required>
+      <label for="nim">NIM Mahasiswa:</label>
+    <input type="text" id="nim" name="nim" required>
 
-      <label for="judul">Judul Buku:</label>
-      <input type="text" id="judul" name="judul" required>
+    <label for="kode_buku">Kode Buku:</label>
+    <input type="text" id="kode_buku" name="kode_buku" required>
 
-      <label for="tanggal_pinjam">Tanggal Peminjaman:</label>
-      <input type="date" id="tanggal_pinjam" name="tanggal_pinjam" required>
+    <label for="id_admin">ID Admin:</label>
+    <input type="text" id="id_admin" name="id_admin" required>
 
-      <label for="tanggal_kembali">Tanggal Pengembalian:</label>
-      <input type="date" id="tanggal_kembali" name="tanggal_kembali" required>
+    <label for="tanggal_pinjam">Tanggal Peminjaman:</label>
+    <input type="date" id="tanggal_pinjam" name="tanggal_pinjam" required>
 
-      <input type="submit" value="Pinjam Buku">
-    </form>
+    <label for="tanggal_kembali">Tanggal Pengembalian:</label>
+    <input type="date" id="tanggal_kembali" name="tanggal_kembali" required>
+
+    <input type="submit" value="Pinjam Buku">
+  </form>
+
   </main>
 
   <footer>
