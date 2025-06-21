@@ -1,4 +1,13 @@
 <?php
+session_start();
+if (!isset($_SESSION['admin'])) {
+  header('Location: login.php');
+  exit;
+}
+include 'template/header.php';
+?>
+
+<?php
 include 'koneksi.php';
 
 if (!isset($_GET['id'])) {
