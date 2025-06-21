@@ -1,77 +1,63 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin'])) {
-  header('Location: login.php');
+  header("Location: login.php");
   exit;
 }
-include 'template/header.php';
+
 include 'koneksi.php';
 
-// Tampilkan data dari form (debug)
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
-
-// Validasi data dari form
-if (!isset($_POST['nim'], $_POST['id_admin'], $_POST['kode_buku'], $_POST['tanggal_pinjam'], $_POST['tanggal_kembali'])) {
-    die("Form tidak lengkap.");
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  die("Akses tidak sah.");
 }
 
-// Ambil dan amankan input
+// Ambil dan amankan data dari form
 $nim         = mysqli_real_escape_string($koneksi, $_POST['nim']);
 $id_admin    = mysqli_real_escape_string($koneksi, $_POST['id_admin']);
 $kode_buku   = mysqli_real_escape_string($koneksi, $_POST['kode_buku']);
-$tgl_pinjam  = $_POST['tanggal_pinjam'];
-$tgl_kembali = $_POST['tanggal_kembali'];
-$status_pinjam = 'Dipinjam';
-$status_riwayat = 'Tepat Waktu'; // karena ini awal peminjaman
+$tgl_pinjam  = mysqli_real_escape_string($koneksi, $_POST['tanggal_pinjam']);
+$tgl_kembali = mysqli_real_escape_string($koneksi, $_POST['tanggal_kembali']);
 
-if ($nim === "" || $id_admin === "" || $kode_buku === "") {
-    die("Field wajib tidak boleh kosong.");
+// Validasi panjang NIM (misal max 12 karakter)
+if (strlen($nim) > 12) {
+  die("NIM terlalu panjang. Maksimal 12 karakter.");
 }
 
-// Buat ID peminjaman otomatis
-$ambilIdTerakhir = mysqli_query($koneksi, "SELECT MAX(id_peminjaman) as max_id FROM peminjaman");
-$dataId = mysqli_fetch_assoc($ambilIdTerakhir);
-$lastId = $dataId['max_id'];
+// Cek apakah stok tersedia
+$cekStok = mysqli_query($koneksi, "SELECT jumlah_stok FROM buku WHERE kode_buku = '$kode_buku'");
+$stok = mysqli_fetch_assoc($cekStok);
 
-if ($lastId) {
-    $angka = (int)substr($lastId, 1); // P001 -> 1
-    $angkaBaru = $angka + 1;
-    $id_peminjaman = 'P' . str_pad($angkaBaru, 3, '0', STR_PAD_LEFT);
-} else {
-    $id_peminjaman = 'P001';
+if (!$stok || $stok['jumlah_stok'] <= 0) {
+  die("Stok tidak mencukupi atau buku tidak ditemukan.");
 }
 
-// Buat ID riwayat otomatis
-$ambilIdR = mysqli_query($koneksi, "SELECT MAX(id_riwayat) as max_id FROM riwayat_peminjaman");
-$dataIdR = mysqli_fetch_assoc($ambilIdR);
-$lastIdR = $dataIdR['max_id'];
-
-if ($lastIdR) {
-    $angka = (int)substr($lastIdR, 1); // R001 -> 1
-    $angkaBaru = $angka + 1;
-    $id_riwayat = 'R' . str_pad($angkaBaru, 3, '0', STR_PAD_LEFT);
-} else {
-    $id_riwayat = 'R001';
+// Cek apakah NIM ada di tabel mahasiswa (foreign key)
+$cekMahasiswa = mysqli_query($koneksi, "SELECT nim FROM mahasiswa WHERE nim = '$nim'");
+if (mysqli_num_rows($cekMahasiswa) === 0) {
+  die("NIM tidak terdaftar dalam data mahasiswa.");
 }
 
-// Insert ke tabel peminjaman
-$peminjaman = mysqli_query($koneksi, "
-    INSERT INTO peminjaman (id_peminjaman, nim, id_admin, kode_buku, tanggal_pinjam, tanggal_kembali, status)
-    VALUES ('$id_peminjaman', '$nim', '$id_admin', '$kode_buku', '$tgl_pinjam', '$tgl_kembali', '$status_pinjam')
+// Generate ID riwayat otomatis
+$max = mysqli_query($koneksi, "SELECT MAX(id_riwayat) AS maxid FROM riwayat_peminjaman");
+$lastId = mysqli_fetch_assoc($max)['maxid'];
+
+$angkaBaru = $lastId ? (int)substr($lastId, 2) + 1 : 1; // potong 2 huruf "RI"
+$id_riwayat = 'RI' . str_pad($angkaBaru, 3, '0', STR_PAD_LEFT); // hasil: RI001, RI002, dst
+
+// Insert data ke riwayat_peminjaman
+$query = mysqli_query($koneksi, "
+  INSERT INTO riwayat_peminjaman (id_riwayat, nim, id_admin, kode_buku, tanggal_pinjam, tanggal_kembali, status)
+  VALUES ('$id_riwayat', '$nim', '$id_admin', '$kode_buku', '$tgl_pinjam', '$tgl_kembali', 'Dipinjam')
 ");
 
-// Insert ke tabel riwayat_peminjaman
-$riwayat = mysqli_query($koneksi, "
-    INSERT INTO riwayat_peminjaman (id_riwayat, nim, id_admin, kode_buku, tanggal_pinjam, tanggal_kembali, status)
-    VALUES ('$id_riwayat', '$nim', '$id_admin', '$kode_buku', '$tgl_pinjam', '$tgl_kembali', '$status_riwayat')
-");
+if ($query) {
+  // Kurangi stok buku
+  mysqli_query($koneksi, "
+    UPDATE buku SET jumlah_stok = jumlah_stok - 1 WHERE kode_buku = '$kode_buku'
+  ");
 
-// Cek keberhasilan
-if ($peminjaman && $riwayat) {
-    echo "Data peminjaman berhasil disimpan.<br><a href='form_peminjaman.php'>Kembali</a>";
+  echo "<script>alert('Peminjaman berhasil disimpan.'); window.location='riwayat_peminjaman.php';</script>";
 } else {
-    echo "Gagal menyimpan: " . mysqli_error($koneksi);
+  echo "Gagal menyimpan data: " . mysqli_error($koneksi);
 }
 ?>

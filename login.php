@@ -1,46 +1,38 @@
 <?php
 session_start();
+if (isset($_SESSION['admin'])) header('Location: index.php');
+
 include 'koneksi.php';
-
+$error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $id_admin = mysqli_real_escape_string($koneksi, $_POST['id_admin']);
-  $password = mysqli_real_escape_string($koneksi, $_POST['password']);
-
-  $query = mysqli_query($koneksi, "SELECT * FROM admin WHERE id_admin = '$id_admin' AND password = '$password'");
-  $admin = mysqli_fetch_assoc($query);
-
-  if ($admin) {
-    $_SESSION['admin'] = $admin['id_admin'];
+  $id = mysqli_real_escape_string($koneksi, $_POST['id_admin']);
+  $pw = mysqli_real_escape_string($koneksi, $_POST['password']);
+  $q  = mysqli_query($koneksi, "SELECT * FROM admin WHERE id_admin='$id' AND password='$pw'");
+  if ($a = mysqli_fetch_assoc($q)) {
+    $_SESSION['admin'] = $a['id_admin'];
     header('Location: index.php');
     exit;
-  } else {
-    $error = "Username atau password salah.";
   }
+  else $error = "Username atau password salah.";
 }
 ?>
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Admin</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Login</title><link rel="stylesheet" href="style.css"></head>
 <body>
-<header style="text-align:center; background-color:#343a40; color:#fff; padding:20px;">
-  <h1>Perpustakaan Klasik</h1>
-</header>
+<header><h1>Perpustakaan Klasik</h1></header>
 <main>
   <h2>Login Admin</h2>
-  <?php if (isset($error)) echo "<p style='color:red;text-align:center;'>$error</p>"; ?>
-  <form method="POST" action="">
-    <label for="id_admin">Masukkan ID:</label>
-    <input type="text" id="id_admin" name="id_admin" required>
-
-    <label for="password">Password:</label>
-    <input type="text" id="password" name="password" required>
-
+  <?php if (isset($_GET['logout'])) echo '<div class="notif">Berhasil logout.</div>'; ?>
+  <?php if ($error) echo '<div class="notif" style="background-color:#ffe0e0;color:#800;">'.$error.'</div>'; ?>
+  <form method="POST">
+    <label>ID Admin:</label>
+    <input type="text" name="id_admin" required>
+    <label>Password:</label>
+    <input type="password" name="password" required>
     <input type="submit" value="Login">
   </form>
 </main>
-<?php include 'template/footer.php'; ?>
+<footer>&copy; <?= date('Y') ?></footer>
+</body>
+</html>

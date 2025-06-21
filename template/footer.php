@@ -1,5 +1,6 @@
+</main>
 <footer>
-  <p>&copy; 2025 Perpustakaan Digital</p>
+  &copy; <?= date('Y') ?> Sistem Perpustakaan. All rights reserved.
 </footer>
 </body>
 </html>
