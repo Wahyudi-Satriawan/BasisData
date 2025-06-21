@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['admin'])) {
+  header('Location: login.php');
+  exit;
+}
 include 'template/header.php';
 include 'koneksi.php';
 ?>
@@ -34,8 +39,7 @@ include 'koneksi.php';
         <th>Judul</th>
         <th>Pengarang</th>
         <th>Tahun</th>
-        <th>Stok</th>
-        <th>Aksi</th>
+        <th colspan="2">Stok</th>
       </tr>
     </thead>
     <tbody>
@@ -48,10 +52,13 @@ include 'koneksi.php';
         echo "<td>" . htmlspecialchars($r['judul']) . "</td>";
         echo "<td>" . htmlspecialchars($r['pengarang']) . "</td>";
         echo "<td>" . $r['tahun_terbit'] . "</td>";
-        echo "<td><input type='number' name='stok[" . $r['kode_buku'] . "]' value='" . $r['jumlah_stok'] . "' min='0' style='width:70px; padding:6px; border-radius:4px; border:1px solid #ccc;'></td>";
-        echo "<td>
-                <input type='hidden' name='update' value='" . $r['kode_buku'] . "'>
-                <button type='submit' class='btn-update'>Simpan</button>
+        echo "<td colspan='2'>
+                <div style='display:flex; gap:6px; align-items:center;'>
+                  <input type='number' name='stok[" . $r['kode_buku'] . "]' value='" . $r['jumlah_stok'] . "' min='0' 
+                    style='width:80px; padding:6px; border-radius:4px; border:1px solid #ccc;'>
+                  <input type='hidden' name='update' value='" . $r['kode_buku'] . "'>
+                  <button type='submit' class='btn-update' style='padding:6px 10px;'>Simpan</button>
+                </div>
               </td>";
         echo "</form>";
         echo "</tr>";

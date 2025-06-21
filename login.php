@@ -33,6 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="submit" value="Login">
   </form>
 </main>
-<footer>&copy; <?= date('Y') ?></footer>
+<?php include 'template/footer.php'; ?>
 </body>
 </html>

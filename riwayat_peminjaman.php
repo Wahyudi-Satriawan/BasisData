@@ -57,12 +57,10 @@ $riwayat = mysqli_query($koneksi, "
 
 <main>
     <h2>📜 Riwayat Peminjaman</h2>
-
     <?php if ($notif): ?>
         <div class="notif"><?= htmlspecialchars($notif) ?></div>
     <?php endif; ?>
-
-    <table>
+    <table class="styled-table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -95,7 +93,7 @@ $riwayat = mysqli_query($koneksi, "
                                 <option value="Terlambat" <?= $row['status'] == 'Terlambat' ? 'selected' : '' ?>>Terlambat</option>
                             </select>
                             <input type="hidden" name="id_riwayat" value="<?= htmlspecialchars($row['id_riwayat']) ?>">
-                            <button type="submit" class="btn" style="margin-top: 5px;">Simpan</button>
+                            <button type='submit' class='btn-update' style='padding:6px 10px;'>Simpan</button>
                         </td>
                     </form>
                 </tr>
