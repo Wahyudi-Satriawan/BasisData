@@ -19,8 +19,13 @@ if (!isset($_SESSION['admin'])) {
                 <td>{$row['kode_buku']}</td>
                 <td>{$row['tanggal_pinjam']}</td>
                 <td>{$row['tanggal_kembali']}</td>
-                <td><a href='kembalikan.php?id={$row['id_peminjaman']}'>Kembalikan</a></td>
-              </tr>";
+               <td>
+                <form method='POST' action='kembalikan.php' onsubmit=\"return confirm('Yakin ingin mengembalikan buku ini?');\">
+                <input type='hidden' name='id_peminjaman' value='{$row['id_peminjaman']}'>
+                <button type='submit'>Kembalikan</button>
+                </form>
+            </td>
+            </tr>";
       }
     ?>
   </table>

@@ -1,48 +1,41 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin'])) {
-  header('Location: login.php');
+  header("Location: login.php");
   exit;
 }
-include 'template/header.php';
-?>
-
-<?php
 include 'koneksi.php';
 
-if (!isset($_GET['id'])) {
-  die("ID peminjaman tidak ditemukan.");
+if (!isset($_POST['id_peminjaman'])) {
+  die("ID peminjaman tidak dikirim.");
 }
 
-$id = $_GET['id'];
+$id = $_POST['id_peminjaman'];
 
-// Ambil data peminjaman yang ingin dikembalikan
-$ambil = mysqli_query($koneksi, "SELECT * FROM peminjaman WHERE id_peminjaman = '$id'");
-$data  = mysqli_fetch_assoc($ambil);
+// Ambil data peminjaman berdasarkan ID
+$result = mysqli_query($koneksi, "SELECT * FROM peminjaman WHERE id_peminjaman = '$id'");
+$data = mysqli_fetch_assoc($result);
 
 if (!$data) {
-  die("Data tidak ditemukan.");
+  die("Data peminjaman tidak ditemukan.");
 }
 
-$nim         = $data['nim'];
-$id_admin    = $data['id_admin'];
-$kode_buku   = $data['kode_buku'];
-$tgl_pinjam  = $data['tanggal_pinjam'];
-$tgl_kembali  = $data['tanggal_kembali'];
-$hari_ini    = date('Y-m-d');
+$tanggal_now = date('Y-m-d');
+$tgl_kembali = $data['tanggal_kembali'];
 
-// Tentukan status pengembalian
-$status_pengembalian = ($hari_ini > $tgl_kembali) ? 'Terlambat' : 'Tepat Waktu';
+// ❗ Logika penentuan status
+$status = ($tanggal_now > $tgl_kembali) ? 'Terlambat' : 'Tepat Waktu';
 
-// Update status di tabel peminjaman
-mysqli_query($koneksi, "UPDATE peminjaman SET status = 'Dikembalikan' WHERE id_peminjaman = '$id'");
+// Update status di riwayat_peminjaman
+mysqli_query($koneksi, "
+  UPDATE riwayat_peminjaman
+  SET status = '$status'
+  WHERE nim = '{$data['nim']}' AND kode_buku = '{$data['kode_buku']}' AND tanggal_pinjam = '{$data['tanggal_pinjam']}'
+");
 
-// Tambahkan entri ke riwayat
-mysqli_query($koneksi, "INSERT INTO riwayat_peminjaman (id_riwayat, nim, id_admin, kode_buku, tanggal_pinjam, tanggal_kembali, status)
-VALUES (NULL, '$nim', '$id_admin', '$kode_buku', '$tgl_pinjam', '$hari_ini', '$status_pengembalian')");
+// Hapus dari tabel peminjaman (karena sudah dikembalikan)
+mysqli_query($koneksi, "DELETE FROM peminjaman WHERE id_peminjaman = '$id'");
 
-// Kembalikan stok buku
-mysqli_query($koneksi, "UPDATE buku SET jumlah_stok = jumlah_stok + 1 WHERE kode_buku = '$kode_buku'");
-
-echo "<script>alert('Buku berhasil dikembalikan.'); window.location='daftar_peminjaman.php';</script>";
+header("Location: daftar_peminjaman.php");
+exit;
 ?>

@@ -12,9 +12,10 @@
   <nav>
     <ul>
       <li><a href="index.php">Beranda</a></li>
-      <li><a href="form_peminjaman.php">Peminjaman</a></li>
       <li><a href="daftar_buku.php">Daftar Buku</a></li>
-      <li><a href="riwayat.php">Riwayat</a></li>
+      <li><a href="form_peminjaman.php">Formulir Peminjaman</a></li>
+      <li><a href="form_peminjaman.php">Daftar Peminjaman</a></li>
+      <li><a href="riwayat.php">Riwayat Peminjaman</a></li>
     </ul>
   </nav>
 </header>
