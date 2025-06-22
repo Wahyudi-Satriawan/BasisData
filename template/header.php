@@ -8,7 +8,7 @@
 </head>
 <body>
 <header>
-  <h1>Perpustakaan Cendikia</h1>
+  <h1>Perpustakaan Cendekia</h1>
   <nav>
     <ul>
       <li><a href="index.php">Dashboard</a></li>
