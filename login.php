@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="id">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>Login</title><link rel="stylesheet" href="style.css"></head>
 <body>
-<header><h1>Perpustakaan Klasik</h1></header>
+<header><h1>Perpustakaan Cendikia</h1></header>
 <main>
   <h2>Login Admin</h2>
   <?php if (isset($_GET['logout'])) echo '<div class="notif">Berhasil logout.</div>'; ?>
