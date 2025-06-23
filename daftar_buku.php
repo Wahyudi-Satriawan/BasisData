@@ -44,6 +44,7 @@ include 'koneksi.php';
     </thead>
     <tbody>
       <?php
+      // Daftar Buku
       $q = mysqli_query($koneksi, "SELECT * FROM buku");
       while ($r = mysqli_fetch_assoc($q)) {
         echo "<tr>";
