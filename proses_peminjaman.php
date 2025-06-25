@@ -18,11 +18,6 @@ $kode_buku   = mysqli_real_escape_string($koneksi, $_POST['kode_buku']);
 $tgl_pinjam  = mysqli_real_escape_string($koneksi, $_POST['tanggal_pinjam']);
 $tgl_kembali = mysqli_real_escape_string($koneksi, $_POST['tanggal_kembali']);
 
-// Validasi panjang NIM (misal max 12 karakter)
-if (strlen($nim) > 12) {
-  die("NIM terlalu panjang. Maksimal 12 karakter.");
-}
-
 // Cek apakah stok tersedia
 $cekStok = mysqli_query($koneksi, "SELECT jumlah_stok FROM buku WHERE kode_buku = '$kode_buku'");
 $stok = mysqli_fetch_assoc($cekStok);

@@ -52,7 +52,7 @@ include 'template/header.php';
 
       <!-- Statistik: Jumlah Total Buku -->
       <div class="stat-box center-text">
-        <h3>📚 Jumlah Total Buku Tersedia</h3>
+        <h3>📚 Jumlah Buku Tersedia</h3>
         <p class="total-buku">
           <?php
           $stok = mysqli_query($koneksi, "SELECT SUM(jumlah_stok) AS total FROM buku");
